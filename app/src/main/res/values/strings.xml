@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LocationLab</string>
+
+    <string name="start">Start Updates</string>
+    <string name="stop">Stop Updates</string>
+    <string name="action_settings">Settings</string>
+</resources>
