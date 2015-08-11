@@ -21,6 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <Button android:id="@+id/map_button"
+            android:text="@string/map_locations"
+            android:layout_below="@id/stop_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
     <ListView
         android:id="@+id/list"
         android:layout_below="@id/stop_location"

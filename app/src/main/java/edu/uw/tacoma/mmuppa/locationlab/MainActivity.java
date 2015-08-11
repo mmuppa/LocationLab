@@ -1,6 +1,7 @@
 package edu.uw.tacoma.mmuppa.locationlab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,13 +23,16 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
     private List<String> mItems;
 
+    private LocationDB mLocationDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mLocationDB = new LocationDB(this);
         mItems = new ArrayList<>();
+        mLocationDB.deleteAllLocations();
 
         ListView listView = (ListView) findViewById(R.id.list);
         final ArrayAdapter<String> itemsAdapter =
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, location.toString());
                 mItems.add(location.toString());
                 itemsAdapter.notifyDataSetChanged();
+                mLocationDB.insertLocation(
+                        location.getLatitude(), location.getLongitude());
 
             }
 
@@ -80,6 +86,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button mapButton = (Button) findViewById(R.id.map_button);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext()
+                        , MapActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER,
           //      locationListener, null);
 
@@ -90,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mLocationDB.closeDB();
     }
 
     @Override
